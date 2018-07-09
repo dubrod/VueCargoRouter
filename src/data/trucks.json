@@ -1,0 +1,20 @@
+[
+  { "id": "default",
+    "name": "Box Truck",
+    "maxweight": 22.0,
+    "maxrange": 45,
+    "maxstops": 4
+  },
+  { "id": 1,
+    "name": "Cargo Truck",
+    "maxweight": 26.0,
+    "maxrange": 75,
+    "maxstops": 6
+  },
+  { "id": 2,
+    "name": "Pickup Truck",
+    "maxweight": 16.0,
+    "maxrange": 35,
+    "maxstops": 3
+  }
+]

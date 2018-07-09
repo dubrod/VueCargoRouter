@@ -1,0 +1,67 @@
+[
+  { "id": "default",
+    "name": "3 Cases of Hefe",
+    "weight": 2.5,
+    "destination": {
+      "title": "Prost Tampa",
+      "address": "2802 E Bearss Ave",
+      "city": "Tampa",
+      "state": "FL",
+      "zip": 33613,
+      "lat": 28.0807629,
+      "long": -82.4302603
+    }
+  },
+  { "id": 1,
+    "name": "Yuengling Delivery",
+    "weight": 5.5,
+    "destination": {
+      "title": "Yuengling Brewing Company",
+      "address": "11111 N 30th St.",
+      "city": "Tampa",
+      "state": "FL",
+      "zip": 33612,
+      "lat": 28.0503295,
+      "long": -82.4463579
+    }
+  },
+  { "id": 2,
+    "name": "LE Bottled Brew",
+    "weight": 4.8,
+    "destination": {
+      "title": "Tampa Harley",
+      "address": "6920 N. Dale Mabry Hwy",
+      "city": "Tampa",
+      "state": "FL",
+      "zip": 33614,
+      "lat": 28.0129936,
+      "long": -82.5055445
+    }
+  },
+  { "id": 3,
+    "name": "Mugs",
+    "weight": 8.2,
+    "destination": {
+      "title": "Hofbrahaus",
+      "address": "123 4th St. S",
+      "city": "St. Petersburg",
+      "state": "FL",
+      "zip": 33701,
+      "lat": 27.7718938,
+      "long": -82.6414387
+    }
+  },
+  { "id": 4,
+    "name": "2 Bud Light Kegs",
+    "weight": 18.0,
+    "destination": {
+      "title": "The Hangar",
+      "address": "540 1st St. S",
+      "city": "St. Petersburg",
+      "state": "FL",
+      "zip": 33701,
+      "lat": 27.7693497,
+      "long": -82.6356022
+    }
+  }
+]
