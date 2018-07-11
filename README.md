@@ -6,7 +6,7 @@
 
 **Demo**
 
-http://dubrod.me/vue/cargo-route/cargo
+http://dubrod.me/vue/cargo-route/
 
 **Scope Logic**
 
