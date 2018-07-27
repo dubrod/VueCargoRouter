@@ -17,7 +17,7 @@ Vue.component('routes-item', RoutesItem)
 
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
+/* eslint-disable */
 new Vue({
   el: '#app',
   router,
@@ -25,6 +25,7 @@ new Vue({
   template: '<App/>',
   data () {
     return {
+      sidebarActive: false,
       editCargoActive: false,
       editTruckActive: false,
       possibleroutes: [],
@@ -102,19 +103,34 @@ new Vue({
           'name': 'Box Truck',
           'maxweight': 22.0,
           'maxrange': 45,
-          'maxstops': 4
+          'maxstops': 4,
+          'hq':{
+            'title': 'Great Bay Distributors',
+            'lat': 27.8612436,
+            'long': -82.6723014
+          }
         },
         { 'id': 1,
           'name': 'Cargo Truck',
           'maxweight': 26.0,
           'maxrange': 75,
-          'maxstops': 6
+          'maxstops': 6,
+          'hq':{
+            'title': 'Great Bay Distributors',
+            'lat': 27.8612436,
+            'long': -82.6723014
+          }
         },
         { 'id': 2,
           'name': 'Pickup Truck',
           'maxweight': 16.0,
           'maxrange': 35,
-          'maxstops': 3
+          'maxstops': 3,
+          'hq':{
+            'title': 'Great Bay Distributors',
+            'lat': 27.8612436,
+            'long': -82.6723014
+          }
         }
       ],
       editcargoobj: {
@@ -141,6 +157,9 @@ new Vue({
     }
   },
   methods: {
+    closeSidebar: function () {
+      (this.sidebarActive ? this.sidebarActive = false : this.sidebarActive = true)
+    },
     closeCargo: function () {
       this.editCargoActive = false
     },
@@ -184,7 +203,14 @@ new Vue({
         'name': 'New Truck',
         'maxweight': 100,
         'maxrange': 1,
-        'maxstops': 1
+        'maxstops': 1,
+        'lastlat': 0,
+        'lastlong': 0,
+        'hq':{
+          'title': 'Great Bay Distributors',
+          'lat': 27.8612436,
+          'long': -82.6723014
+        }
       }
       this.trucks.push(truckModel)
     },
@@ -202,19 +228,18 @@ new Vue({
     },
     truckName: function (id) {
       if (!id) return ''
-      for (let i = 0; i < this.trucks.length; i++) {
-        if (this.trucks[i].id === id) {
-          return this.trucks[i].name
-        }
-      }
+      const truck = this.trucks.filter(item => item.id === id)
+      return truck[0].name
+    },
+    truckHq: function (id) {
+      if (!id) return ''
+      const truck = this.trucks.filter(item => item.id === id)
+      return truck[0].hq.title
     },
     truckStops: function (id) {
       if (!id) return ''
-      for (let i = 0; i < this.trucks.length; i++) {
-        if (this.trucks[i].id === id) {
-          return this.trucks[i].maxstops
-        }
-      }
+      const truck = this.trucks.filter(item => item.id === id)
+      return truck[0].maxstops
     },
     stopsClass: function (routeStops, truckId) {
       const truck = this.trucks.filter(item => item.id === truckId)
@@ -224,23 +249,23 @@ new Vue({
     },
     truckRange: function (id) {
       if (!id) return ''
-      for (let i = 0; i < this.trucks.length; i++) {
-        if (this.trucks[i].id === id) {
-          return this.trucks[i].maxrange
-        }
-      }
+      const truck = this.trucks.filter(item => item.id === id)
+      return truck[0].maxrange
     },
     truckWeight: function (id) {
       if (!id) return ''
-      for (let i = 0; i < this.trucks.length; i++) {
-        if (this.trucks[i].id === id) {
-          return this.trucks[i].maxweight
-        }
-      }
+      const truck = this.trucks.filter(item => item.id === id)
+      return truck[0].maxweight
     },
     weightClass: function (routeWeight, truckId) {
       const truck = this.trucks.filter(item => item.id === truckId)
       if (routeWeight > truck[0].maxweight) {
+        return 'text-danger'
+      }
+    },
+    rangeClass: function (routeRange, truckId) {
+      const truck = this.trucks.filter(item => item.id === truckId)
+      if (routeRange > truck[0].maxrange) {
         return 'text-danger'
       }
     },
@@ -262,6 +287,11 @@ new Vue({
           'weight': 0,
           'stops': 0,
           'range': 0,
+          'startlat': this.trucks[i].hq.lat,
+          'startlong': this.trucks[i].hq.long,
+          'lastlat': 0,
+          'lastlong': 0,
+          'rangeback': 0,
           'cargo': []
         }
         this.routes.push(routeModel)
@@ -274,6 +304,9 @@ new Vue({
         this.routes[i].cargo = []
         this.routes[i].stops = 0
         this.routes[i].weight = 0
+        this.routes[i].range = 0
+        this.routes[i].lastlat = 0
+        this.routes[i].lastlong = 0
       }
       const readyCargo = this.cargo.filter(item => item.truck)
       for (let i = 0; i < readyCargo.length; i++) {
@@ -281,10 +314,50 @@ new Vue({
           if (this.routes[r].truckId === readyCargo[i].truck) {
             this.routes[r].stops++
             this.routes[r].weight = this.routes[r].weight + readyCargo[i].weight
-            this.routes[r].cargo.push(readyCargo[i])
+
+            var lat1 = this.routes[r].startlat
+            var long1 = this.routes[r].startlong
+            if (this.routes[r].lastlat > 0 && this.routes[r].lastlat !== readyCargo[i].destination.lat) {
+              lat1 = this.routes[r].lastlat
+              long1 = this.routes[r].lastlong
+            }
+
+            let lat2 = readyCargo[i].destination.lat
+            let long2 = readyCargo[i].destination.long
+
+            let dist = this.calcDistance(lat1, long1, lat2, long2)
+
+            this.routes[r].lastlat = lat2
+            this.routes[r].lastlong = long2
+
+            this.routes[r].range = parseInt(this.routes[r].range) + parseInt(dist)
+
+            this.routes[r].cargo.push({
+              'id': readyCargo[i].id,
+              'name': readyCargo[i].name,
+              'weight': readyCargo[i].weight,
+              'range': dist,
+              'title': readyCargo[i].destination.title
+            })
           }
         }
       }
+      //with routes loop set we can set return distance
+      for (let r = 0; r < this.routes.length; r++) {
+        if (this.routes[r].lastlat) {
+          let back_dist = this.calcDistance(this.routes[r].startlat, this.routes[r].startlong, this.routes[r].lastlat, this.routes[r].lastlong)
+          this.routes[r].rangeback = back_dist
+          this.routes[r].range = parseInt(this.routes[r].range) + parseInt(back_dist)
+        }
+      }
+
+    },
+    calcDistance: function (lat1, long1, lat2, long2) {
+      let p = 0.017453292519943295
+      let c = Math.cos
+      let a = 0.5 - c((lat2 - lat1) * p) / 2 + c(lat1 * p) * c(lat2 * p) * (1 - c((long2 - long1) * p)) / 2
+      let dist = ''+12742 * Math.asin(Math.sqrt(a))+''
+      return ''+dist.substr(0, 5)+' Miles'
     }
   },
   mounted () {

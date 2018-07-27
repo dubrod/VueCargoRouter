@@ -2,8 +2,6 @@
 
 > Little Vue JS App to maintain cargo items, trucks and routes. Proof of concept.
 
-> Integration with Google Maps routing and distance APIs not posted
-
 **Demo**
 
 http://dubrod.me/vue/cargo-route/
@@ -11,10 +9,10 @@ http://dubrod.me/vue/cargo-route/
 **Scope Logic**
 
 1. Limit Shipment by Weight
-2. Limit Route by Distance [ToDo]
+2. Limit Route by Distance
 3. Limit Route by # of Stops
 4. Add/Edit/Delete Trucks with Name, Max Weight, Max Range, Max Stops
-5. Add/Edit/Delete Cargo with Name, Weight, Destination Details (ToDo)
+5. Add/Edit/Delete Cargo with Name, Weight, Destination Details
 
 **Views**
 

@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <button id="menuToggle">
+    <button id="menuToggle" v-on:click="$root.closeSidebar()">
       <span class="menu"></span>
     </button>
-    <aside class="active" id="vueSidebar">
+    <aside id="vueSidebar" v-bind:class="{ active: $root.sidebarActive }">
       <div id="asideHeader">
         <div class="text-white h4" style="padding: 6px 0 0 50px;">
           {{appName}}

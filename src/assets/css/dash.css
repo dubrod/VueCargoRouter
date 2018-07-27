@@ -5,6 +5,7 @@
   --slate: #edf1f7;
   --darkgrey: #434646;
 }
+ul{list-style: none;margin: 0;padding: 0;}
 button{background: transparent; border: none; outline:none; cursor: pointer;}
 .breadcrumb{margin-bottom:0; background-color: inherit; padding: .3rem 1rem; color: var(--secondary);}
 .breadcrumb-item a{color: var(--secondary);}
@@ -12,14 +13,14 @@ button{background: transparent; border: none; outline:none; cursor: pointer;}
 
 #app{
   display: flex; flex-direction: row; flex-wrap: nowrap; position: relative; background-color: var(--slate);
-  overflow-x: hidden;
+  overflow-x: hidden; min-height: 100vh;
 }
 aside{
   background-color: var(--royal); border-right:1px solid var(--deepsea);
-  width: 50px; height:100vh; overflow: hidden;
+  width: 50px; height:inherit; overflow: hidden;
   transition: width .2s ease-out;
 }
-aside ul{margin: 0;padding: 0;}
+
 aside ul li{margin: 0;padding: 0;border-bottom: 1px solid var(--ocean);}
 aside ul li a{display: block; color: white;padding: .8rem;height: 56px; transition: all .3s;}
 aside ul li a:hover,aside ul li a.router-link-exact-active{color:white; text-decoration: none;background-color: #104961;}
